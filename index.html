@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pulse – Health guide and tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f7f7;--surface:#fff;--ink:#14283a;--muted:#55697a;--line:#d5e0e3;--teal:#0e7468;--teal-soft:#dcefec;--alert:#b3261e;--alert-soft:#fbe9e7;
+--serif:'Newsreader',Georgia,serif;--sans:'Public Sans',system-ui,sans-serif;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1a22;--surface:#162632;--ink:#e6eef2;--muted:#9fb3c0;--line:#294050;--teal:#4fc3b4;--teal-soft:#16413f;--alert:#ff8a80;--alert-soft:#3b1f1d;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1a22;--surface:#162632;--ink:#e6eef2;--muted:#9fb3c0;--line:#294050;--teal:#4fc3b4;--teal-soft:#16413f;--alert:#ff8a80;--alert-soft:#3b1f1d;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--sans)}
+main,header .in{max-width:760px;margin:0 auto;padding:0 18px}
+header{padding:22px 0 0;border-bottom:1px solid var(--line);background:var(--surface)}
+h1{font:600 2.1rem/1.1 var(--serif);margin:0 0 6px;letter-spacing:-.01em}
+header p{margin:0 0 16px;color:var(--muted);max-width:52ch}
+nav{display:flex;gap:4px}
+nav button{font:500 1rem var(--sans);background:none;border:0;padding:12px 16px;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent}
+nav button[aria-selected="true"]{color:var(--teal);border-color:var(--teal)}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,textarea:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.notice{margin:18px 0;padding:12px 14px;border-radius:8px;background:var(--alert-soft);color:var(--ink);border-left:4px solid var(--alert);font-size:.93rem}
+section{padding-bottom:48px}
+h2{font:600 1.5rem/1.2 var(--serif);margin:26px 0 12px}
+details{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin-bottom:10px}
+summary{cursor:pointer;padding:14px 16px;font:600 1.18rem var(--serif);list-style:none;display:flex;justify-content:space-between;gap:10px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--teal);font:500 1.4rem/1 var(--sans)}
+details[open] summary::after{content:"–"}
+.body{padding:0 16px 16px}
+.body h3{font:600 .95rem var(--sans);margin:14px 0 4px;color:var(--teal)}
+.body p,.body ul{margin:0}.body ul{padding-left:20px}
+.body .see h3{color:var(--alert)}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;width:100%}
+label{display:block;font-size:.88rem;font-weight:600;margin-bottom:4px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.full{grid-column:1/-1}
+@media(max-width:520px){.row{grid-template-columns:1fr}}
+.btn{font:600 1rem var(--sans);background:var(--teal);color:#fff;border:0;border-radius:8px;padding:11px 18px;cursor:pointer}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn{color:#08201d}}
+:root[data-theme="dark"] .btn{color:#08201d}
+.link{background:none;border:0;color:var(--muted);cursor:pointer;font:inherit;text-decoration:underline;padding:4px}
+ul.list{list-style:none;margin:0;padding:0}
+.item{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.item:first-child{border-top:0}
+.item .main{flex:1;min-width:0}
+.item small{color:var(--muted);display:block}
+.item.done .nm{text-decoration:line-through;color:var(--muted)}
+.chk{width:26px;height:26px;accent-color:var(--teal);flex:none}
+.sev{flex:none;min-width:38px;text-align:center;font-weight:600;border-radius:6px;padding:4px 8px;background:var(--teal-soft);color:var(--teal)}
+.sev.hi{background:var(--alert-soft);color:var(--alert)}
+.empty{color:var(--muted);margin:0;padding:6px 0}
+.sr{position:absolute;left:-9999px}
+.hidden{display:none}
+.bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden;margin:8px 0 4px}.bar i{display:block;height:100%;width:0;background:var(--teal);transition:width .3s}
+.badge{flex:none;font-size:.78rem;font-weight:600;padding:3px 9px;border-radius:99px;background:var(--bg);border:1px solid var(--line);color:var(--muted)}
+.badge.ok{background:var(--teal-soft);color:var(--teal);border-color:transparent}.badge.hi{background:var(--alert-soft);color:var(--alert);border-color:transparent}.badge.soon{border-color:var(--teal);color:var(--teal)}
+.big{font:600 1.2rem var(--serif);margin:0}
+nav{overflow-x:auto}nav button{white-space:nowrap}
+.acts{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}.acts a{text-decoration:none;display:inline-block}
+.btn.alt{background:var(--surface)!important;color:var(--teal)!important;border:1px solid var(--teal)}
+@media(max-width:520px){nav button{padding:12px 10px;font-size:.95rem}}
+</style>
+</head>
+<body>
+<header><div class="in">
+<h1>Pulse</h1>
+<p>Plain-language health guides, plus a private log for your symptoms and medications.</p>
+<nav role="tablist">
+<button role="tab" id="t-learn" aria-selected="true" data-tab="learn">Learn</button>
+<button role="tab" id="t-track" aria-selected="false" data-tab="track">My tracker</button>
+<button role="tab" id="t-checks" aria-selected="false" data-tab="checks">My checkups</button>
+<button role="tab" id="t-help" aria-selected="false" data-tab="help">Get help</button>
+</nav></div></header>
+
+<main>
+<div class="notice"><strong>Not a substitute for medical care.</strong> This page gives general information only. In an emergency, such as chest pain, trouble breathing, stroke signs or heavy bleeding, call your local emergency number now.</div>
+
+<section id="learn">
+<label for="q" class="sr">Search topics</label>
+<input id="q" type="search" placeholder="Search topics, e.g. headache" autocomplete="off">
+<h2>Common conditions</h2>
+<div id="topics"></div>
+<p class="empty hidden" id="none">No topics match that search. Try a different word.</p>
+</section>
+
+<section id="track" class="hidden">
+<h2>Medications today</h2>
+<div class="card">
+<ul class="list" id="meds"></ul>
+<form id="medform" onsubmit="return false" style="margin-top:14px">
+<div class="row">
+<div><label for="mn">Medication</label><input id="mn" maxlength="60" placeholder="e.g. Metformin"></div>
+<div><label for="md">Dose</label><input id="md" maxlength="40" placeholder="e.g. 500 mg"></div>
+<div class="full"><label for="mt">Usual time</label><input id="mt" type="time"></div>
+</div>
+<button class="btn" id="addmed" type="button">Add medication</button>
+</form>
+</div>
+
+<h2>Symptom log</h2>
+<div class="card">
+<div class="row">
+<div class="full"><label for="sn">Symptom</label><input id="sn" maxlength="80" placeholder="e.g. Headache"></div>
+<div><label for="ss">Severity: <output id="sv">5</output> of 10</label><input id="ss" type="range" min="1" max="10" value="5"></div>
+<div><label for="sd">Date</label><input id="sd" type="date"></div>
+<div class="full"><label for="so">Notes (optional)</label><textarea id="so" rows="2" maxlength="200" placeholder="Triggers, what helped, how long it lasted"></textarea></div>
+</div>
+<button class="btn" id="addsym" type="button">Save entry</button>
+</div>
+<div class="card"><ul class="list" id="syms"></ul></div>
+<p style="color:var(--muted);font-size:.9rem">Entries stay in this browser on this device only. Nothing is sent anywhere. Bring your log to appointments.</p>
+<button class="link" id="clear" type="button">Delete all my tracker data</button>
+</section>
+
+<section id="checks" class="hidden">
+<h2>My checkups</h2>
+<div class="card"><p class="big" id="cprog"></p><div class="bar"><i id="bar"></i></div><p class="empty" id="streak"></p></div>
+<div class="card"><ul class="list" id="checks-list"></ul>
+<div class="row" style="margin-top:14px"><div><label for="cn">Checkup</label><input id="cn" maxlength="60" placeholder="e.g. Blood pressure check"></div><div><label for="cd">Date</label><input id="cd" type="date"></div></div>
+<button class="btn" id="addck" type="button">Add checkup</button></div>
+<h2>Share your progress</h2>
+<div class="card"><p class="empty" style="margin-bottom:12px">Make a short summary to send to your nurse or doctor. You choose whether to send it.</p>
+<div class="row"><div><label for="pn">Your name (optional)</label><input id="pn" maxlength="60"></div><div><label for="pp">Your phone number (optional)</label><input id="pp" type="tel" inputmode="tel" maxlength="20"></div></div>
+<p class="empty" style="margin-bottom:12px;font-size:.88rem">Added to the summary only if you fill it in, so your nurse can call you. Share it only if you agree.</p>
+<button class="btn" id="mksum" type="button">Create summary</button>
+<div id="sumbox" class="hidden" style="margin-top:14px"><label for="sumtxt" class="sr">Summary</label><textarea id="sumtxt" rows="9" readonly></textarea>
+<div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap"><a class="btn" id="wa" target="_blank" rel="noopener" style="text-decoration:none">Send on WhatsApp</a><button class="btn" id="cpy" type="button" style="background:var(--surface);color:var(--teal);border:1px solid var(--teal)">Copy</button></div></div></div>
+<p style="color:var(--muted);font-size:.9rem">Everything here is entered by you and saved only in this browser. It shows your own progress and cannot confirm that a checkup or dose really happened.</p>
+</section>
+
+<section id="help" class="hidden">
+<h2>Get help</h2>
+<div class="notice"><strong>Emergency?</strong> Do not wait for a callback. Call your local emergency number now.</div>
+<div class="notice" style="background:var(--teal-soft);border-color:var(--teal)"><strong>Test site.</strong> These are sample contacts for testing. The numbers do not work yet.</div>
+<div class="card"><p class="big">Senior Doctor</p><small class="muted">General questions and urgent advice · 8 am to 8 pm · Sample number 0000 000 0001</small><div class="acts"><a class="btn" href="tel:+00000000001">Call</a><a class="btn alt" href="https://wa.me/00000000001" target="_blank" rel="noopener">WhatsApp</a></div></div>
+<div class="card"><p class="big">Senior Nurse</p><small class="muted">Medication and care questions · 24 hours · Sample number 0000 000 0002</small><div class="acts"><a class="btn" href="tel:+00000000002">Call</a><a class="btn alt" href="https://wa.me/00000000002" target="_blank" rel="noopener">WhatsApp</a></div></div>
+<div class="card"><p class="big">Nurse on duty</p><small class="muted">Daily check-ins and follow-up · 8 am to 6 pm · Sample number 0000 000 0003</small><div class="acts"><a class="btn" href="tel:+00000000003">Call</a><a class="btn alt" href="https://wa.me/00000000003" target="_blank" rel="noopener">WhatsApp</a></div></div>
+<div class="card"><p class="big">Pharmacist</p><small class="muted">Medicine questions and side effects · 9 am to 5 pm · Sample number 0000 000 0004</small><div class="acts"><a class="btn" href="tel:+00000000004">Call</a><a class="btn alt" href="https://wa.me/00000000004" target="_blank" rel="noopener">WhatsApp</a></div></div>
+</section>
+</main>
+
+<script>
+const TOPICS=[
+{t:"High blood pressure",k:"hypertension heart stroke",w:"Blood pushes too hard against artery walls over time. It usually causes no symptoms, so regular checks matter.",s:["Cut back on salt and highly processed food","Move for about 150 minutes a week","Limit alcohol and avoid smoking","Take prescribed medicine every day, even when you feel fine"],d:"Readings are repeatedly 130/80 or higher, or you have a severe headache, vision changes or chest pain."},
+{t:"Type 2 diabetes",k:"blood sugar glucose insulin thirst",w:"The body does not use insulin well, so sugar builds up in the blood. Early signs include thirst, frequent urination and tiredness.",s:["Favor vegetables, whole grains and lean protein","Walk after meals when you can","Check blood sugar as your care team advises","Look at your feet daily for sores"],d:"You have very high readings, confusion, fruity-smelling breath, or a wound that is not healing."},
+{t:"Migraine",k:"headache head pain nausea light",w:"A throbbing headache, often on one side, that can bring nausea and sensitivity to light and sound.",s:["Rest in a dark, quiet room","Take pain relief early, as the label directs","Keep a regular sleep and meal schedule","Note triggers in your symptom log"],d:"It is the worst headache of your life, starts suddenly, follows a head injury, or comes with weakness, fever or a stiff neck."},
+{t:"Cold or flu?",k:"fever cough sore throat influenza",w:"Colds build slowly with a runny nose and sore throat. Flu tends to arrive fast with fever, body aches and exhaustion.",s:["Rest and drink plenty of fluids","Use saline rinses or warm drinks for comfort","Wash hands often and stay home while feverish","Ask a pharmacist before combining medicines"],d:"You have trouble breathing, a fever lasting more than 3 days, or symptoms that improve then suddenly worsen. Babies and older adults should be seen sooner."},
+{t:"Sprains and strains",k:"ankle injury swelling sport muscle",w:"A sprain stretches or tears a ligament. A strain affects a muscle or tendon. Both bring pain, swelling and bruising.",s:["Protect the joint and rest it for the first day or two","Apply a cold pack for 15 to 20 minutes at a time","Compress with a bandage and raise the limb","Return to movement gradually"],d:"You cannot put weight on it, the area looks misshapen, or you feel numbness or tingling."},
+{t:"Better sleep",k:"insomnia tired rest night",w:"Most adults need 7 to 9 hours. Steady habits help more than any single trick.",s:["Keep the same wake-up time every day","Get daylight in the morning","Avoid caffeine after midday and screens before bed","Keep the bedroom cool and dark"],d:"You snore loudly with pauses in breathing, or poor sleep lasts longer than a few weeks."},
+{t:"Malaria",k:"mosquito fever chills travel tropical parasite",w:"A parasite spread by infected mosquito bites. It causes fever, chills, sweats, headache and body aches, and can become serious quickly if untreated.",s:["Get a blood test before treating: only a test confirms malaria","Take prescribed antimalarial medicine exactly as directed","Prevent bites with nets, repellent and long sleeves at dusk and night","Ask a doctor about preventive tablets before traveling to a risk area"],d:"You have a fever during or up to a year after time in a malaria area. Get tested the same day. Go to emergency care for confusion, seizures, yellow eyes or trouble breathing."},
+{t:"Vitamin D deficiency",k:"bone sunlight calcium rickets fatigue supplement",w:"Low vitamin D can weaken bones and muscles. Many people have no clear signs, though some feel tired or have aches in the bones or muscles.",s:["Get safe daily time outdoors in daylight","Eat oily fish, egg yolks and fortified foods","Ask for a blood test before starting high-dose supplements","Follow your doctor’s advice on dose, since too much can be harmful"],d:"You have lasting bone pain, muscle weakness, frequent fractures, or a child has bowed legs or slow growth. Risk is higher with dark skin, little sun, older age or covering most skin."},
+{t:"Asthma",k:"wheeze breathing inhaler cough chest tight allergy",w:"The airways become inflamed and narrow, causing wheezing, coughing, chest tightness and breathlessness, often worse at night or with triggers.",s:["Use your reliever and controller inhalers as prescribed","Learn your triggers, such as dust, smoke, pollen or cold air","Keep a written asthma action plan","Rinse your mouth after steroid inhalers"],d:"Your reliever is not helping, you cannot speak in full sentences, or your lips look blue. Treat these as emergencies."},
+{t:"Iron-deficiency anemia",k:"tired pale blood dizzy iron hemoglobin",w:"Too little iron means fewer healthy red blood cells. Common signs are tiredness, pale skin, dizziness and shortness of breath on exertion.",s:["Eat beans, lentils, leafy greens, meat or fortified cereals","Pair iron foods with vitamin C, such as citrus or peppers","Have a blood test before taking iron tablets","Find the cause, such as heavy periods or poor diet"],d:"You have chest pain, fainting, black or bloody stools, very heavy periods, or symptoms that do not improve."},
+{t:"Diarrhea and dehydration",k:"stomach vomiting food poisoning fluids gastro",w:"Loose stools from infection or contaminated food or water. The main risk is losing too much fluid.",s:["Sip oral rehydration solution often","Eat small, bland meals once you can","Wash hands well and prepare food safely","Rest and avoid alcohol and very sugary drinks"],d:"There is blood in the stool, high fever, signs of dehydration (very dark urine, no urine for 8 hours, dizziness), or it lasts over 2 days. Infants and older adults should be seen sooner."},
+{t:"Stress and anxiety",k:"worry panic mental health mood calm",w:"Stress is a normal reaction to pressure. Anxiety becomes a problem when worry is constant or gets in the way of daily life.",s:["Try slow breathing: in for 4 counts, out for 6","Move your body and keep a steady sleep routine","Cut back on caffeine","Talk with someone you trust"],d:"Worry is hard to control, you have panic attacks, or you feel hopeless. If you have thoughts of harming yourself, contact emergency services or a crisis line right away."},
+{t:"High blood pressure in pregnancy",k:"preeclampsia pregnant antenatal swelling baby maternal",w:"Blood pressure that rises after about 20 weeks can signal preeclampsia, which affects both mother and baby. It can develop without warning.",s:["Go to every antenatal check so blood pressure and urine are tested","Take any prescribed medicine as directed","Rest and drink water, and keep a record of your readings","Ask a clinician before using pain relievers such as ibuprofen"],d:"You have a severe headache, blurred vision, pain under the right ribs, sudden swelling of the face or hands, or the baby moves less. Go to emergency care at once, and treat a seizure as an emergency."},
+{t:"Typhoid fever",k:"salmonella fever water food stomach travel",w:"A bacterial infection spread by contaminated food or water. Fever rises over several days, with headache, stomach pain, weakness and either constipation or diarrhea.",s:["Get a blood test to confirm it before treatment","Take the full course of antibiotics prescribed","Drink safe water, eat well-cooked food and wash hands often","Ask about the typhoid vaccine if you live in or travel to a risk area"],d:"A fever lasts more than 3 days, especially after travel or exposure to unsafe water. Seek emergency care for severe belly pain, bloody stools or confusion."},
+{t:"Tuberculosis (TB)",k:"tb cough lungs weight loss night sweats chest",w:"A bacterial infection that mainly affects the lungs. TB is curable, but only if treatment is completed.",s:["Finish the whole course, usually about 6 months, even when you feel well","Cover coughs and keep rooms well ventilated","Let close contacts know so they can be tested","Eat well and attend every follow-up visit"],d:"You have a cough lasting more than 2 to 3 weeks, weight loss, night sweats or fever, or you cough up blood."},
+{t:"Rashes and eczema",k:"skin itch dry allergy fungal dermatitis",w:"Itchy, red or dry skin has many causes, including eczema, allergies and fungal infections. Eczema flares come and go.",s:["Moisturize at least once a day, especially after short lukewarm baths","Use gentle, fragrance-free soap","Avoid known triggers and keep nails short to limit scratching","Do not use steroid creams for long without advice"],d:"The skin is warm, swollen, leaking pus or spreading, or a rash comes with fever. A rash with lip or face swelling or trouble breathing is an emergency."},
+{t:"Fever in children",k:"child baby toddler temperature kids paracetamol",w:"Fever is the body fighting infection, and it is usually less worrying than how the child looks and acts.",s:["Offer fluids often and dress the child lightly","If medicine is needed, follow the label for age and weight","Never give aspirin to children","Let the child rest and monitor how they behave"],d:"A baby under 3 months has a temperature of 38°C or more, a fever lasts over 3 days, or the child is very drowsy, not drinking, has a stiff neck, or has a rash that does not fade when pressed. Trouble breathing or a seizure needs emergency care."}
+];
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function renderTopics(f=""){
+ const q=f.toLowerCase().trim();let n=0;
+ $("#topics").innerHTML=TOPICS.filter(x=>!q||(x.t+" "+x.k+" "+x.w).toLowerCase().includes(q)).map(x=>{n++;return `<details><summary>${esc(x.t)}</summary><div class="body"><p>${esc(x.w)}</p><h3>What helps</h3><ul>${x.s.map(i=>`<li>${esc(i)}</li>`).join("")}</ul><div class="see"><h3>See a doctor if</h3><p>${esc(x.d)}</p></div></div></details>`}).join("");
+ $("#none").classList.toggle("hidden",n>0);
+}
+$("#q").addEventListener("input",e=>renderTopics(e.target.value));
+document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>{
+ const t=b.dataset.tab;
+ document.querySelectorAll("nav button").forEach(x=>x.setAttribute("aria-selected",x===b));
+ ["learn","track","checks","help"].forEach(x=>$("#"+x).classList.toggle("hidden",t!==x));
+ if(location.hash!=="#"+t)try{history.replaceState(null,"","#"+t)}catch(e){}
+}));
+
+// Storage (per-browser, guarded)
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+let state={meds:[],syms:[],days:{},checks:[]};
+try{const r=localStorage.getItem("pulse-v1");if(r)state=Object.assign(state,JSON.parse(r))}catch(e){}
+const save=()=>{try{localStorage.setItem("pulse-v1",JSON.stringify(state))}catch(e){}};
+
+function renderMeds(){
+ const t=today();
+ const n=state.meds.length,k=state.meds.filter(m=>m.taken===t).length;
+ if(n)state.days[t]={t:k,n:n};else delete state.days[t];
+ save();renderStreak();
+ $("#meds").innerHTML=state.meds.length?state.meds.map((m,i)=>{const done=m.taken===t;return `<li class="item ${done?"done":""}"><input class="chk" type="checkbox" data-med="${i}" ${done?"checked":""} aria-label="Taken today: ${esc(m.name)}"><div class="main"><span class="nm">${esc(m.name)}</span><small>${esc(m.dose||"")}${m.dose&&m.time?" at ":""}${esc(m.time||"")}</small></div><a class="link" target="_blank" rel="noopener" href="${remLink(m)}">Remind me</a><button class="link" data-delmed="${i}" aria-label="Remove ${esc(m.name)}">Remove</button></li>`}).join(""):`<li class="empty">No medications yet. Add one below, then tick it off each day.</li>`;
+}
+function renderSyms(){
+ $("#syms").innerHTML=state.syms.length?state.syms.map((s,i)=>`<li class="item"><span class="sev ${s.sev>=8?"hi":""}">${s.sev}</span><div class="main"><span>${esc(s.name)}</span><small>${esc(s.date)}${s.note?" · "+esc(s.note):""}</small></div><button class="link" data-delsym="${i}" aria-label="Delete entry ${esc(s.name)}">Delete</button></li>`).join(""):`<li class="empty">No entries yet. Log how you feel and it will appear here.</li>`;
+}
+$("#meds").addEventListener("click",e=>{
+ const d=e.target.dataset;
+ if(d.delmed!==undefined){state.meds.splice(+d.delmed,1)}
+ else if(d.med!==undefined){const m=state.meds[+d.med];m.taken=m.taken===today()?"":today()}
+ else return;
+ save();renderMeds();
+});
+$("#syms").addEventListener("click",e=>{const i=e.target.dataset.delsym;if(i===undefined)return;state.syms.splice(+i,1);save();renderSyms()});
+$("#addmed").addEventListener("click",()=>{
+ const n=$("#mn").value.trim();if(!n){$("#mn").focus();return}
+ state.meds.push({name:n,dose:$("#md").value.trim(),time:$("#mt").value,taken:""});
+ save();["#mn","#md","#mt"].forEach(s=>$(s).value="");renderMeds();
+});
+$("#ss").addEventListener("input",e=>$("#sv").textContent=e.target.value);
+$("#addsym").addEventListener("click",()=>{
+ const n=$("#sn").value.trim();if(!n){$("#sn").focus();return}
+ state.syms.unshift({name:n,sev:+$("#ss").value,date:$("#sd").value||today(),note:$("#so").value.trim()});
+ state.syms.sort((a,b)=>b.date.localeCompare(a.date));
+ save();$("#sn").value="";$("#so").value="";renderSyms();
+});
+$("#clear").addEventListener("click",()=>{
+ if(!confirm("Delete all medications and symptom entries from this browser?"))return;
+ state={meds:[],syms:[],days:{},checks:[]};save();renderMeds();renderSyms();renderChecks();
+});
+const NL=String.fromCharCode(10);
+const dd=d=>Math.round((new Date(d+'T00:00')-new Date(today()+'T00:00'))/864e5);
+const ago=n=>{const d=new Date();d.setDate(d.getDate()-n);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const full=k=>{const r=state.days[k];return !!r&&r.n>0&&r.t===r.n};
+function streak(){let s=0,i=full(today())?0:1;while(full(ago(i))){s++;i++}return s}
+function week(){let c=0;for(let i=0;i<7;i++)if(full(ago(i)))c++;return c}
+function stat(c){if(c.done)return['Done','ok'];const d=dd(c.date);return d<0?['Overdue','hi']:d<=7?['Due soon','soon']:['Upcoming','']}
+function renderStreak(){const el=$('#streak');if(el)el.textContent=state.meds.length?streak()+'-day streak. All medication taken on '+week()+' of the last 7 days.':'Add medications in My tracker to see your streak.'}
+function renderChecks(){
+ const c=state.checks,dn=c.filter(x=>x.done).length;
+ $('#cprog').textContent=c.length?dn+' of '+c.length+' checkups done':'No checkups yet';
+ $('#bar').style.width=(c.length?Math.round(dn/c.length*100):0)+'%';
+ const L=c.map((x,i)=>({x,i})).sort((a,b)=>a.x.date.localeCompare(b.x.date));
+ $('#checks-list').innerHTML=L.length?L.map(({x,i})=>{const[s,k]=stat(x);return `<li class="item ${x.done?'done':''}"><input class="chk" type="checkbox" data-ck="${i}" ${x.done?'checked':''} aria-label="Done: ${esc(x.name)}"><div class="main"><span class="nm">${esc(x.name)}</span><small>${esc(x.date)}</small></div><span class="badge ${k}">${s}</span><button class="link" data-delck="${i}" aria-label="Remove ${esc(x.name)}">Remove</button></li>`}).join(''):'<li class="empty">Add your first checkup below.</li>';
+ renderStreak();
+}
+$('#checks-list').addEventListener('click',e=>{const d=e.target.dataset;if(d.delck!==undefined)state.checks.splice(+d.delck,1);else if(d.ck!==undefined){const c=state.checks[+d.ck];c.done=!c.done}else return;save();renderChecks()});
+$('#addck').addEventListener('click',()=>{const n=$('#cn').value.trim(),d=$('#cd').value;if(!n){$('#cn').focus();return}if(!d){$('#cd').focus();return}state.checks.push({name:n,date:d,done:false});save();$('#cn').value='';renderChecks()});
+$('#mksum').addEventListener('click',()=>{
+ const c=state.checks,dn=c.filter(x=>x.done).length;
+ const pn=$('#pn').value.trim(),pp=$('#pp').value.trim();state.name=pn;state.phone=pp;save();
+ let t='Health progress summary ('+today()+')'+NL+(pn?'Patient: '+pn+NL:'')+(pp?'Phone: '+pp+NL:'')+NL+'Checkups: '+dn+' of '+c.length+' done'+NL;
+ [...c].sort((a,b)=>a.date.localeCompare(b.date)).forEach(x=>t+='- '+x.name+' ('+x.date+'): '+stat(x)[0]+NL);
+ t+=NL+'Medication: '+(state.meds.length?streak()+'-day streak; all taken on '+week()+' of the last 7 days':'none recorded')+NL;
+ if(state.syms.length){t+=NL+'Recent symptoms:'+NL;state.syms.slice(0,3).forEach(s=>t+='- '+s.name+' '+s.sev+'/10 ('+s.date+')'+NL)}
+ t+=NL+'Self-reported by the patient.';
+ $('#sumtxt').value=t;$('#sumbox').classList.remove('hidden');
+ $('#wa').href='https://wa.me/?text='+encodeURIComponent(t);
+});
+$('#cpy').addEventListener('click',async()=>{const a=$('#sumtxt');try{await navigator.clipboard.writeText(a.value);$('#cpy').textContent='Copied'}catch(e){a.select();$('#cpy').textContent='Select and copy'}});
+function remLink(m){const d=today().replace(/-/g,''),p=n=>String(n).padStart(2,'0'),[h,mi]=(m.time||'08:00').split(':').map(Number),e=Math.min(1439,h*60+mi+30);return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent('Take '+m.name+(m.dose?' ('+m.dose+')':''))+'&dates='+d+'T'+p(h)+p(mi)+'00/'+d+'T'+p(Math.floor(e/60))+p(e%60)+'00&recur=RRULE:FREQ=DAILY&details='+encodeURIComponent('Medication reminder from Pulse')}
+$('#pn').value=state.name||'';$('#pp').value=state.phone||'';
+$("#sd").value=today();
+renderTopics();renderMeds();renderSyms();renderChecks();
+try{const b=document.querySelector('[data-tab="'+location.hash.slice(1)+'"]');if(b)b.click()}catch(e){}
+</script>
+</body>
+</html>
